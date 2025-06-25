@@ -1,36 +1,57 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>คำนวณจุดคุ้มทุนโซล่าเซลล์</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมคำนวณระบบโซลาร์เซลล์ V.3</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="calculator-container">
-    <h2>เครื่องคำนวณจุดคุ้มทุนระบบโซล่าเซลล์</h2>
-    <div class="form-group">
-      <label>ขนาดระบบ (kW):</label>
-      <input type="number" id="systemSize" value="5">
+    <div class="container">
+        <h1>โปรแกรมคำนวณระบบโซลาร์เซลล์ V.3</h1>
+
+        <section>
+            <h2>1️⃣ คำนวณจากค่าไฟต่อเดือน</h2>
+            <label for="monthlyBillSimple">ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
+            <input type="number" id="monthlyBillSimple" placeholder="เช่น 3000">
+            <div style="display: flex; gap: 10px;">
+                <button onclick="calculateRecommendation()">คำนวณ</button>
+                <button class="clear" onclick="clearRecommendation()">ล้างข้อมูล</button>
+            </div>
+            <div id="recommendationResult"></div>
+        </section>
+
+        <hr>
+
+        <section>
+            <h2>2️⃣ คำนวณแบบละเอียด</h2>
+
+            <label>ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
+            <input type="number" id="monthlyBill" placeholder="เช่น 2000">
+
+            <label>ขนาดระบบ (kW):</label>
+            <input type="number" id="systemSize" placeholder="เช่น 5">
+
+            <label>ราคาติดตั้ง (บาท):</label>
+            <input type="number" id="installationCost" placeholder="เช่น 150000">
+
+            <label>ค่าไฟต่อหน่วย (บาท):</label>
+            <input type="number" id="electricityRate" placeholder="เช่น 4.5">
+
+            <label>ชั่วโมงแดดเฉลี่ยต่อวัน:</label>
+            <input type="number" id="sunHours" placeholder="เช่น 5">
+
+            <label>ประสิทธิภาพการรับแสง (%):</label>
+            <input type="number" id="efficiency" placeholder="เช่น 80">
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="calculate()">คำนวณ</button>
+                <button class="clear" onclick="clearForm()">ล้างข้อมูล</button>
+            </div>
+
+            <div id="result" class="result-box"></div>
+        </section>
     </div>
-    <div class="form-group">
-      <label>ราคาติดตั้ง (บาท):</label>
-      <input type="number" id="installationCost" value="100000">
-    </div>
-    <div class="form-group">
-      <label>ค่าไฟต่อหน่วย (บาท):</label>
-      <input type="number" id="electricityRate" value="4.5">
-    </div>
-    <div class="form-group">
-      <label>ชั่วโมงแดดเฉลี่ยต่อวัน:</label>
-      <input type="number" id="sunHours" value="5">
-    </div>
-    <button onclick="calculatePayback()">คำนวณ</button>
-    <div class="result">
-      <p id="monthlyProduction"></p>
-      <p id="monthlySavings"></p>
-      <p id="paybackPeriod"></p>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
