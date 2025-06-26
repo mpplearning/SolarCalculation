@@ -30,6 +30,12 @@ window.onload = formatInputFields;
 
 function calculateRecommendation() {
     const bill = getInputNumber("monthlyBillSimple");
+    const resultDiv = document.getElementById("recommendationResult");
+    // ✅ เช็กว่าผู้ใช้กรอกค่าหรือไม่
+    if (bill <= 0 || isNaN(bill)) {
+        resultDiv.innerHTML = `<p style="color:red;">❌ กรุณากรอกข้อมูลค่าไฟที่ใช้จ่ายต่อเดือน</p>`;
+        return; // ออกจากฟังก์ชันทันที ไม่คำนวณต่อ
+    }
     const rate = 4.5;
     const usage = bill / rate;
 
