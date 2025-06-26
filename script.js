@@ -6,8 +6,30 @@ const table = {
     250: 27000, 300: 32400, 350: 37800, 400: 43200, 500: 54000
 };
 
+function formatNumber(num) {
+    return parseFloat(num).toLocaleString('en-US');
+}
+
+function getInputNumber(id) {
+    return parseFloat(document.getElementById(id).value.replace(/,/g, '')) || 0;
+}
+
+function formatInputFields() {
+    document.querySelectorAll("input[type=text]").forEach(input => {
+        input.addEventListener("blur", () => {
+            const value = input.value.replace(/,/g, '');
+            const number = parseFloat(value);
+            if (!isNaN(number)) input.value = number.toLocaleString('en-US');
+        });
+        input.addEventListener("focus", () => {
+            input.value = input.value.replace(/,/g, '');
+        });
+    });
+}
+window.onload = formatInputFields;
+
 function calculateRecommendation() {
-    const bill = parseFloat(document.getElementById("monthlyBillSimple").value);
+    const bill = getInputNumber("monthlyBillSimple");
     const rate = 4.5;
     const usage = bill / rate;
 
@@ -21,30 +43,31 @@ function calculateRecommendation() {
             closest = kW;
         }
     }
+    
+    const savingPercent = (table[closest] * rate / bill) * 100;   // ใหม่
 
-    let result = `
-        ✅ ขนาดระบบติดตั้ง: ${closest} kW<br>
-        ✅ ผลิตไฟเฉลี่ยต่อวัน: ${(table[closest]/30).toFixed(1)} หน่วย<br>
-        ✅ ผลิตไฟเฉลี่ยต่อเดือน: ${table[closest]} หน่วย<br>
-        ✅ ช่วยประหยัดค่าไฟได้: ${(table[closest] * rate).toFixed(2)} บาท/เดือน<br>
-        ✅ ค่าไฟเดิมของลูกค้า: ${bill.toFixed(2)} บาท หรือ ${(usage).toFixed(2)} หน่วย<br>
-        ✅ ค่าไฟที่เหลือต้องจ่ายจริง: ${(bill - table[closest]*rate).toFixed(2)} บาท/เดือน<br>
-        ✅ ระยะเวลาคืนทุน: ประมาณ ${(closest * 30000 / (table[closest]*rate)).toFixed(1)} เดือน (~${(closest * 30000 / (table[closest]*rate) / 12).toFixed(1)} ปี)
-    `;
+let result = `
+    ✅ ขนาดระบบติดตั้ง: ${closest} kW<br>
+    ✅ ผลิตไฟเฉลี่ยต่อวัน: ${formatNumber((table[closest] / 30).toFixed(1))} หน่วย<br>
+    ✅ ผลิตไฟเฉลี่ยต่อเดือน: ${formatNumber(table[closest])} หน่วย<br>
+    ✅ ช่วยประหยัดค่าไฟได้: ${formatNumber((table[closest] * rate).toFixed(2))} บาท/เดือน<br>
+    ✅ ค่าไฟเดิมของลูกค้า: ${formatNumber(bill.toFixed(2))} บาท หรือ ${formatNumber(usage.toFixed(2))} หน่วย<br>
+    ✅ ค่าไฟที่เหลือต้องจ่ายจริง: ${formatNumber((bill - table[closest] * rate).toFixed(2))} บาท/เดือน<br>
+    ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(0)}%</strong><br>
 
+`;
+
+    
     if (usage > 54000) {
         result = result.replace(
             /ค่าไฟที่เหลือต้องจ่ายจริง: (.*?) บาท\/เดือน/,
             'ค่าไฟที่เหลือต้องจ่ายจริง: <span style="color:red">$1 บาท/เดือน</span>'
         );
-        result = result.replace(
-            /ระยะเวลาคืนทุน: ประมาณ (.*?) เดือน \(~(.*?) ปี\)/,
-            'ระยะเวลาคืนทุน: <span style="color:red">ประมาณ $1 เดือน (~$2 ปี)</span>'
-        );
         result += `<br><br><span style="color:red">🔸 <b>หมายเหตุ:</b> ระบบสามารถคำนวณสูงสุดได้ 500 kW หากเกินกว่านี้ กรุณาใช้การคำนวณแบบละเอียดด้านล่าง</span>`;
     }
 
     document.getElementById("recommendationResult").innerHTML = result;
+    
 }
 
 function clearRecommendation() {
@@ -53,17 +76,17 @@ function clearRecommendation() {
 }
 
 function calculate() {
-    const systemSize = parseFloat(document.getElementById("systemSize").value);
-    const installationCost = parseFloat(document.getElementById("installationCost").value);
-    const electricityRate = parseFloat(document.getElementById("electricityRate").value);
-    const sunHours = parseFloat(document.getElementById("sunHours").value);
-    const efficiencyInput = parseFloat(document.getElementById("efficiency").value);
-    const monthlyBill = parseFloat(document.getElementById("monthlyBill").value);
+    const systemSize = getInputNumber("systemSize");
+    const installationCost = getInputNumber("installationCost");
+    const electricityRate = getInputNumber("electricityRate");
+    const sunHours = getInputNumber("sunHours");
+    const efficiencyInput = getInputNumber("efficiency");
+    const monthlyBill = getInputNumber("monthlyBill");
 
     const resultBox = document.getElementById("result");
     resultBox.innerHTML = "";
 
-    if (systemSize <= 0 || installationCost <= 0 || electricityRate <= 0 || sunHours <= 0 || efficiencyInput <= 0 || monthlyBill <= 0) {
+    if ([systemSize, installationCost, electricityRate, sunHours, efficiencyInput, monthlyBill].some(v => v <= 0)) {
         resultBox.innerHTML = `<p style="color:red;">❌ กรุณากรอกข้อมูลให้ครบทุกช่องและเป็นค่าที่มากกว่า 0</p>`;
         return;
     }
@@ -74,38 +97,36 @@ function calculate() {
     }
 
     const efficiency = efficiencyInput / 100;
-    const dailyOutputKWh = systemSize * sunHours * efficiency;
-    const monthlyOutputKWh = dailyOutputKWh * 30;
-    const monthlySaving = monthlyOutputKWh * electricityRate;
-    const paybackPeriod = installationCost / monthlySaving;
+    const dailyOutput = systemSize * sunHours * efficiency;
+    const monthlyOutput = dailyOutput * 30;
+    const saving = monthlyOutput * electricityRate;
+    const payback = installationCost / saving;
+    const usage = monthlyBill / electricityRate;
+    const remaining = Math.max(monthlyBill - saving, 0);
 
-    const estimatedUsageKWh = monthlyBill / electricityRate;
-    let remainingBill = monthlyBill - monthlySaving;
-    if (remainingBill < 0) remainingBill = 0;
-
-    let warning = "";
-    if (monthlyOutputKWh < estimatedUsageKWh * 0.5) {
-        warning = `<p style="color:orange;">⚠️ ระบบที่เลือกอาจมีขนาดเล็กกว่าการใช้งานจริงมาก อาจพิจารณาขยายระบบเพื่อประหยัดค่าไฟได้มากขึ้น</p>`;
+    let warning = '';
+    if (monthlyOutput < usage * 0.5) {
+        warning = `<p style="color:orange;">⚠️ ระบบอาจมีขนาดเล็กกว่าความต้องการจริงมาก</p>`;
     }
 
+    const savingPercent = (saving / monthlyBill) * 100;
+
     resultBox.innerHTML = `
-        ✅ <strong>ขนาดระบบติดตั้ง:</strong> ${systemSize.toFixed(2)} kW<br>
-        ✅ <strong>ผลิตไฟเฉลี่ยต่อวัน:</strong> ${dailyOutputKWh.toFixed(2)} หน่วย<br>
-        ✅ <strong>ผลิตไฟเฉลี่ยต่อเดือน:</strong> ${monthlyOutputKWh.toFixed(2)} หน่วย<br>
-        ✅ <strong>ช่วยประหยัดค่าไฟได้:</strong> ${monthlySaving.toFixed(2)} บาท/เดือน<br>
-        ✅ <strong>ค่าไฟเดิมของลูกค้า:</strong> ${monthlyBill.toFixed(2)} บาท หรือ ${estimatedUsageKWh.toFixed(2)} หน่วย<br>
-        ✅ <strong>ค่าไฟที่เหลือต้องจ่ายจริง:</strong> ${remainingBill.toFixed(2)} บาท/เดือน<br>
-        ✅ <strong>ระยะเวลาคืนทุน:</strong> ประมาณ ${paybackPeriod.toFixed(1)} เดือน (${(paybackPeriod / 12).toFixed(1)} ปี)
+        ✅ <strong>ขนาดระบบติดตั้ง:</strong> ${formatNumber(systemSize.toFixed(2))} kW<br>
+        ✅ <strong>ผลิตไฟเฉลี่ยต่อวัน:</strong> ${formatNumber(dailyOutput.toFixed(2))} หน่วย<br>
+        ✅ <strong>ผลิตไฟเฉลี่ยต่อเดือน:</strong> ${formatNumber(monthlyOutput.toFixed(2))} หน่วย<br>
+        ✅ <strong>ช่วยประหยัดค่าไฟได้:</strong> ${formatNumber(saving.toFixed(2))} บาท/เดือน<br>
+        ✅ <strong>ค่าไฟเดิมของลูกค้า:</strong> ${formatNumber(monthlyBill.toFixed(2))} บาท หรือ ${formatNumber(usage.toFixed(2))} หน่วย<br>
+        ✅ <strong>ค่าไฟที่เหลือต้องจ่ายจริง:</strong> ${formatNumber(remaining.toFixed(2))} บาท/เดือน<br>
+        ✅ <strong>ระยะเวลาคืนทุน:</strong> ${formatNumber(payback.toFixed(1))} เดือน (~${formatNumber((payback/12).toFixed(1))} ปี)<br>
+        ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(2)}%</strong><br> <!-- บรรทัดใหม่ -->
         ${warning}
     `;
 }
 
 function clearForm() {
-    document.getElementById("systemSize").value = "";
-    document.getElementById("installationCost").value = "";
-    document.getElementById("electricityRate").value = "";
-    document.getElementById("sunHours").value = "";
-    document.getElementById("efficiency").value = "";
-    document.getElementById("monthlyBill").value = "";
+    ["monthlyBill", "systemSize", "installationCost", "electricityRate", "sunHours", "efficiency"].forEach(id => {
+        document.getElementById(id).value = "";
+    });
     document.getElementById("result").innerHTML = "";
 }
