@@ -13,13 +13,16 @@
         <section>
             <h2>1️⃣ คำนวณจากค่าไฟต่อเดือน</h2>
             <label for="monthlyBillSimple">ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
-            <input type="number" id="monthlyBillSimple" placeholder="เช่น 3000">
+            <input type="text" id="monthlyBillSimple" placeholder="เช่น 3,000">
             <div style="display: flex; gap: 10px;">
                 <button onclick="calculateRecommendation()">คำนวณ</button>
                 <button class="clear" onclick="clearRecommendation()">ล้างข้อมูล</button>
             </div>
             <div id="recommendationResult"></div>
         </section>
+        <p style="color: green; font-size: 0.9em;"><strong>Remark:</strong> การคำนวณนี้อิงจากค่าไฟ 4.5 บาท/หน่วย, แดดเฉลี่ย 5 ชม./วัน และประสิทธิภาพการรับแสง 80% โดยเชื่อมต่อกับระบบ On-grid สำหรับการใช้งานช่วงกลางวันเท่านั้น (ไม่รวมการเก็บไฟไว้ใช้กลางคืน)</p>
+
+        <p style="color: gray; font-size: 0.9em;"><strong>Remark:</strong> เป็นค่าประมาณที่ได้จากฐานข้อมูลจริง โดยรวมค่าความสูญเสียเฉลี่ยไว้แล้ว หากต้องการผลลัพธ์ที่แม่นยำและปรับตามสภาพแวดล้อมจริงของคุณ แนะนำให้ใช้การคำนวณแบบละเอียดด้านล่าง</p>
 
         <hr>
 
@@ -27,22 +30,22 @@
             <h2>2️⃣ คำนวณแบบละเอียด</h2>
 
             <label>ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
-            <input type="number" id="monthlyBill" placeholder="เช่น 2000">
+            <input type="text" id="monthlyBill" placeholder="เช่น 2,000">
 
             <label>ขนาดระบบ (kW):</label>
-            <input type="number" id="systemSize" placeholder="เช่น 5">
+            <input type="text" id="systemSize" placeholder="เช่น 5">
 
             <label>ราคาติดตั้ง (บาท):</label>
-            <input type="number" id="installationCost" placeholder="เช่น 150000">
+            <input type="text" id="installationCost" placeholder="เช่น 150,000">
 
             <label>ค่าไฟต่อหน่วย (บาท):</label>
-            <input type="number" id="electricityRate" placeholder="เช่น 4.5">
+            <input type="text" id="electricityRate" placeholder="เช่น 4.5">
 
             <label>ชั่วโมงแดดเฉลี่ยต่อวัน:</label>
-            <input type="number" id="sunHours" placeholder="เช่น 5">
+            <input type="text" id="sunHours" placeholder="เช่น 5">
 
             <label>ประสิทธิภาพการรับแสง (%):</label>
-            <input type="number" id="efficiency" placeholder="เช่น 80">
+            <input type="text" id="efficiency" placeholder="เช่น 80">
 
             <div style="display: flex; gap: 10px;">
                 <button onclick="calculate()">คำนวณ</button>
@@ -51,6 +54,8 @@
 
             <div id="result" class="result-box"></div>
         </section>
+        <p style="color: green; font-size: 0.9em;"><strong>Remark:</strong> การคำนวณนี้อิงจากการคำนวณจากการใช้งานไฟฟ้าในช่วงกลางวัน โดยเชื่อมต่อกับการไฟฟ้า (On-grid) และไม่รวมการเก็บไฟไว้ใช้กลางคืน</p>
+
     </div>
     <script src="script.js"></script>
 </body>
