@@ -1,9 +1,10 @@
-
 const table = {
     5: 540, 10: 1080, 15: 1620, 20: 2160,
     30: 3240, 40: 4320, 60: 6480, 80: 8640,
     100: 10800, 120: 12960, 150: 16200, 200: 21600,
-    250: 27000, 300: 32400, 350: 37800, 400: 43200, 500: 54000
+    250: 27000, 300: 32400, 350: 37800, 400: 43200,
+    500: 54000, 600: 64800, 700: 75600, 800: 86400,
+    900: 97200, 1000: 108000
 };
 
 function formatNumber(num) {
@@ -31,39 +32,58 @@ window.onload = formatInputFields;
 function calculateRecommendation() {
     const bill = getInputNumber("monthlyBillSimple");
     const resultDiv = document.getElementById("recommendationResult");
-    // ✅ เช็กว่าผู้ใช้กรอกค่าหรือไม่
+
     if (bill <= 0 || isNaN(bill)) {
         resultDiv.innerHTML = `<p style="color:red;">❌ กรุณากรอกข้อมูลค่าไฟที่ใช้จ่ายต่อเดือน</p>`;
-        return; // ออกจากฟังก์ชันทันที ไม่คำนวณต่อ
+        return;
     }
+
     const rate = 4.5;
     const usage = bill / rate;
+
+    const maxSupportKW = 500;
+const maxSupportKWh = table[maxSupportKW]; // 54,000 หน่วย
+
+if (usage > maxSupportKWh) {
+    resultDiv.innerHTML = `<p style="color:red;">❌ ระบบสามารถคำนวณสูงสุดได้ 500 kW หากเกินกว่านี้ กรุณาใช้การคำนวณแบบละเอียดด้านล่าง</p>`;
+    return;
+}
+
+
+    // ตรวจสอบว่ามีการเลือกเปอร์เซ็นต์การประหยัดหรือไม่
+    const selectedTarget = document.querySelector('input[name="savingTarget"]:checked');
+    let targetUsage = usage;
+    if (selectedTarget) {
+       const percent = parseInt(selectedTarget.value);
+        targetUsage = usage * (1 - percent / 100);
+
+    }
 
     let closest = 5;
     let diff = Infinity;
 
     for (const kW in table) {
         const kWh = table[kW];
-        if (Math.abs(kWh - usage) < diff) {
-            diff = Math.abs(kWh - usage);
+        if (Math.abs(kWh - targetUsage) < diff) {
+            diff = Math.abs(kWh - targetUsage);
             closest = kW;
         }
     }
-    
-    const savingPercent = (table[closest] * rate / bill) * 100;   // ใหม่
 
-let result = `
-    ✅ ขนาดระบบติดตั้ง: ${closest} kW<br>
-    ✅ ผลิตไฟเฉลี่ยต่อวัน: ${formatNumber((table[closest] / 30).toFixed(1))} หน่วย<br>
-    ✅ ผลิตไฟเฉลี่ยต่อเดือน: ${formatNumber(table[closest])} หน่วย<br>
-    ✅ ช่วยประหยัดค่าไฟได้: ${formatNumber((table[closest] * rate).toFixed(2))} บาท/เดือน<br>
-    ✅ ค่าไฟเดิมของลูกค้า: ${formatNumber(bill.toFixed(2))} บาท หรือ ${formatNumber(usage.toFixed(2))} หน่วย<br>
-    ✅ ค่าไฟที่เหลือต้องจ่ายจริง: ${formatNumber((bill - table[closest] * rate).toFixed(2))} บาท/เดือน<br>
-    ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(0)}%</strong><br>
+    const savingBaht = table[closest] * rate;
+    const savingPercent = (savingBaht / bill) * 100;
+    const remainingBill = Math.max(bill - savingBaht, 0);
 
-`;
+    let result = `
+        ✅ ขนาดระบบติดตั้ง: ${closest} kW<br>
+        ✅ ผลิตไฟเฉลี่ยต่อวัน: ${formatNumber((table[closest] / 30).toFixed(1))} หน่วย<br>
+        ✅ ผลิตไฟเฉลี่ยต่อเดือน: ${formatNumber(table[closest])} หน่วย<br>
+        ✅ ช่วยประหยัดค่าไฟได้: ${formatNumber(savingBaht.toFixed(2))} บาท/เดือน<br>
+        ✅ ค่าไฟเดิมของลูกค้า: ${formatNumber(bill.toFixed(2))} บาท หรือ ${formatNumber(usage.toFixed(2))} หน่วย<br>
+        ✅ ค่าไฟที่เหลือต้องจ่ายจริง: ${formatNumber(remainingBill.toFixed(2))} บาท/เดือน<br>
+        ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(0)}%</strong><br>
+    `;
 
-    
     if (usage > 54000) {
         result = result.replace(
             /ค่าไฟที่เหลือต้องจ่ายจริง: (.*?) บาท\/เดือน/,
@@ -72,13 +92,15 @@ let result = `
         result += `<br><br><span style="color:red">🔸 <b>หมายเหตุ:</b> ระบบสามารถคำนวณสูงสุดได้ 500 kW หากเกินกว่านี้ กรุณาใช้การคำนวณแบบละเอียดด้านล่าง</span>`;
     }
 
-    document.getElementById("recommendationResult").innerHTML = result;
-    
+    resultDiv.innerHTML = result;
 }
 
 function clearRecommendation() {
     document.getElementById("monthlyBillSimple").value = "";
     document.getElementById("recommendationResult").innerHTML = "";
+
+    const radios = document.querySelectorAll('input[name="savingTarget"]');
+    radios.forEach(radio => radio.checked = false);
 }
 
 function calculate() {
@@ -125,7 +147,7 @@ function calculate() {
         ✅ <strong>ค่าไฟเดิมของลูกค้า:</strong> ${formatNumber(monthlyBill.toFixed(2))} บาท หรือ ${formatNumber(usage.toFixed(2))} หน่วย<br>
         ✅ <strong>ค่าไฟที่เหลือต้องจ่ายจริง:</strong> ${formatNumber(remaining.toFixed(2))} บาท/เดือน<br>
         ✅ <strong>ระยะเวลาคืนทุน:</strong> ${formatNumber(payback.toFixed(1))} เดือน (~${formatNumber((payback/12).toFixed(1))} ปี)<br>
-        ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(2)}%</strong><br> <!-- บรรทัดใหม่ -->
+        ✅ <strong style="color:green">ประหยัดไปแล้ว: ${savingPercent.toFixed(2)}%</strong><br>
         ${warning}
     `;
 }
@@ -136,3 +158,20 @@ function clearForm() {
     });
     document.getElementById("result").innerHTML = "";
 }
+// จัดการปุ่มลด %
+document.querySelectorAll('.saving-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.saving-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+
+    const percent = this.getAttribute('data-value');
+    document.querySelectorAll('input[name="savingTarget"]').forEach(r => r.checked = false); // เคลียร์ radio เดิม
+    const fakeRadio = document.createElement('input');
+    fakeRadio.type = 'radio';
+    fakeRadio.name = 'savingTarget';
+    fakeRadio.value = percent;
+    fakeRadio.checked = true;
+    fakeRadio.style.display = 'none';
+    document.body.appendChild(fakeRadio);
+  });
+});
