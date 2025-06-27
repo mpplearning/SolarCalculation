@@ -48,3 +48,39 @@ button.clear {
     margin-top: 10px;
     border-left: 4px solid #38a169;
 }
+
+#saving-options {
+  display: flex;
+  gap: 20px; /* ระยะห่างระหว่างปุ่ม */
+  flex-wrap: wrap; /* ถ้าแคบเกินจอ จะแสดงบรรทัดใหม่ให้อัตโนมัติ */
+  margin-top: 10px;
+}
+#saving-options label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+}
+#saving-options input[type="radio"] {
+  margin-right: 5px;
+}
+.saving-btn {
+  background-color: #ccc;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  margin-right: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.saving-btn:hover {
+  background-color: #aaa;
+}
+
+.saving-btn.active {
+  background-color: #2d6a4f;
+  color: white;
+}
+
