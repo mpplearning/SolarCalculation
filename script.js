@@ -1,4 +1,9 @@
+// SolarCalculation v4.0 by mpplearning
+// License: Non-Commercial Use Only
+// Contact: punmanee@gmail.com
+
 // Placeholder for On-Grid script logic in future
+
 console.log("Script loaded for solar system UI");
 const table = {
     5: 540, 10: 1080, 15: 1620, 20: 2160,
