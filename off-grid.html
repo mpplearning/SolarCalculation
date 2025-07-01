@@ -9,14 +9,26 @@ Contact: punmanee@gmail.com
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ Off-Grid</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>ระบบ Off-Grid (Demo Version)</title>
+    <link rel="stylesheet" href="offstyles.css">
 </head>
 <body>
     <div class="container">
-        <h1>ระบบ Off-Grid</h1>
-        <p>🔋กำลังอยู่ในระหว่างพัฒนา...</p><br>
+        <h1>🔋 ระบบ Off-Grid (Demo Version)</h1>
+        <label for="monthlyBill">💰 ค่าไฟต่อเดือน (บาท):</label>
+        <input type="number" id="monthlyBill" placeholder="เช่น 3500">
+
+        <label for="backupHours">⏱️ จำนวนชั่วโมงที่ต้องการสำรองไฟต่อวัน:</label>
+        <input type="number" id="backupHours" placeholder="เช่น 12">
+
+        <div class="button-row"><br>
+            <button onclick="calculateOffGrid()">คำนวณ</button>
+            <button class="clear" onclick="resetForm()">ล้างข้อมูล</button>
+        </div>
+
+        <div id="results" class="results-box"></div><br>
         <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a>
     </div>
+    <script src="offscript.js"></script>
 </body>
 </html>
