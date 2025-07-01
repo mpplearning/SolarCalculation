@@ -29,12 +29,10 @@ Created and maintained by **mpplearning** (Manussapol Punmanee)
 This tool was built for educational and professional use, especially tailored for Thai users and solar energy beginners looking to explore system design and ROI.
 
 ## 📄 License & Usage Policy
-This project is licensed under the **MIT License**.  
-You are free to view and learn from the code.
 
-However, any reuse of this code (partial or full) for **commercial purposes or redistribution** must give proper credit to the author.  
-**Unauthorized commercial use, cloning, or sale of derivative tools without permission is strictly prohibited.**
-
-If you wish to use this project in your business or for public deployment, please contact:
-
+This project uses a **custom MIT-based license for non-commercial use**.
+You are free to view, use, and learn from the code for **personal or educational purposes**.
+🚫 **Commercial use, redistribution, or the creation of derivative tools for sale or business purposes is not allowed** without explicit permission.
+If you wish to use this project in your business, products, or public deployment, please contact:
 📧 punmanee@gmail.com (or via GitHub profile)
+
