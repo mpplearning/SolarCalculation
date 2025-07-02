@@ -164,4 +164,38 @@ button.clear {
   color: gray;
 }
 
+.system-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
 
+.system-option .button {
+  margin-right: 15px;
+  min-width: 160px;
+}
+
+.system-option .desc {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.intro-text {
+  text-align: center;
+  font-size: 1.05rem;
+  color: green;
+  margin-bottom: 20px;
+}
+
+.system-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 10px 0;
+}
+
+.system-option .desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
