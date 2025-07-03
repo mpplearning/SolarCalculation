@@ -167,3 +167,78 @@ button.clear {
   font-weight: bold;
   margin-top: 10px;
 }
+
+.error-boxload {
+  background-color: #ffe5e5;
+  color: #cc0000;
+  padding: 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* ปรับปุ่มล้างข้อมูลกลางคืน */
+button.clear {
+  background-color: #666;
+}
+
+/* ปรับเส้นคั่นช่วงเวลา */
+hr {
+  border: none;
+  height: 3px;
+  background-color: #00a000;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* ปุ่มทั้งหมดให้กลมกลืน */
+.button-row button {
+  min-width: 140px;
+}
+
+h3 {
+  margin-top: 20px;
+  color: #003366;
+  border-left: 5px solid #0066cc;
+  padding-left: 10px;
+}
+
+button {
+  font-size: 16px;
+  padding: 8px 12px;
+  margin: 4px 6px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005a9c;
+  color: white;
+}
+
+#deviceList div, #nideviceList div {
+  margin: 4px 0;
+  padding: 6px 10px;
+  background-color: #f3f3f3;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+}
+
+#resultArea {
+  background-color: #e9f7ef;
+  border: 1px solid #b2dfdb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#resultArea b {
+  color: #004466;
+}
+
+#resultArea {
+  font-size: 16px;
+  line-height: 1.8;
+}
