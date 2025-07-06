@@ -1,5 +1,5 @@
 <!--
-SolarCalculation v4.0 by mpplearning
+SolarCalculation v4.2 by mpplearning
 License: Non-Commercial Use Only
 Contact: punmanee@gmail.com
 -->
@@ -16,10 +16,10 @@ Contact: punmanee@gmail.com
     <div class="container">
         <h1>🔋 ระบบ Off-Grid (Demo Version)</h1>
         <label for="monthlyBill">💰 ค่าไฟต่อเดือน (บาท):</label>
-        <input type="number" id="monthlyBill" placeholder="เช่น 3500">
+        <input type="text" id="monthlyBill" placeholder="เช่น 4,000">
 
         <label for="backupHours">⏱️ จำนวนชั่วโมงที่ต้องการสำรองไฟต่อวัน:</label>
-        <input type="number" id="backupHours" placeholder="เช่น 12">
+        <input type="number" id="backupHours" placeholder="เช่น 19">
 
         <div class="button-row"><br>
             <button onclick="calculateOffGrid()">คำนวณ</button>
@@ -28,22 +28,22 @@ Contact: punmanee@gmail.com
 
         <div id="results" class="results-box"></div><br>
 
-        <!-- ปุ่มแสดง/ซ่อนส่วนคำนวณแบบละเอียด -->
-        <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button>
-
+        <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button><br><br>
+        <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
         <div id="detailedSection" style="display: none; margin-top: 20px;">
             <h3>🔌 รายการอุปกรณ์ไฟฟ้า 10:00–15:00 น. (5 ชั่วโมง/วัน)</h3>
             <div id="deviceList"></div>
 
             <div style="margin-top: 10px;">
                 <label>ชื่ออุปกรณ์:
-                    <select id="deviceSelect">
+                    <select id="deviceSelect_day">
                         <option value="">-- เลือกอุปกรณ์ --</option>
                     </select>
                 </label><br>
 
                 <label>ชั่วโมงใช้งาน/วัน:
-                    <input type="number" id="deviceHoursDay" />
+                    <input type="number" id="deviceHoursDayHour" placeholder="ชั่วโมง" style="width: 80px;"> ชั่วโมง
+                    <input type="number" id="deviceHoursDayMin" placeholder="นาที" style="width: 80px;"> นาที
                 </label><br>
 
                 <button onclick="addSelectedDevice('day')">➕ เพิ่มอุปกรณ์</button>
@@ -57,13 +57,14 @@ Contact: punmanee@gmail.com
 
             <div style="margin-top: 10px;">
                 <label>ชื่ออุปกรณ์:
-                    <select id="nideviceSelect">
+                    <select id="deviceSelect_night">
                         <option value="">-- เลือกอุปกรณ์ --</option>
                     </select>
                 </label><br>
 
                 <label>ชั่วโมงใช้งาน/วัน:
-                    <input type="number" id="deviceHoursNight" />
+                    <input type="number" id="deviceHoursNightHour" placeholder="ชั่วโมง" style="width: 80px;"> ชั่วโมง
+                    <input type="number" id="deviceHoursNightMin" placeholder="นาที" style="width: 80px;"> นาที
                 </label><br>
 
                 <button onclick="addSelectedDevice('night')">➕ เพิ่มอุปกรณ์</button>
@@ -71,6 +72,7 @@ Contact: punmanee@gmail.com
             </div>
 
             <button onclick="calculateTotalLoad()" style="margin-top: 10px;">📊 คำนวณโหลดรวม</button>
+            <button onclick="clearTotalLoad()" class="clear">🧹 ล้างข้อมูลคำนวณโหลดรวม</button>
             <div id="resultArea" style="margin-top: 10px;"></div><br>
 
             <br><a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
