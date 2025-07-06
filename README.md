@@ -1,4 +1,4 @@
-# ☀️ SolarCalculation v4.0
+# ☀️ SolarCalculation v4.2
 
 A simple, educational, and practical **solar calculator** for estimating installation size, monthly savings, and payback period of solar panel systems — designed for **homeowners, small businesses, and beginners** interested in solar energy.
 
