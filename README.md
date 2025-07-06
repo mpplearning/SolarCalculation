@@ -1,38 +1,71 @@
-# SolarCalculation v4.0
+# ☀️ SolarCalculation v4.0
 
-A simple and practical solar calculator for estimating installation size, monthly savings, and payback period of solar panel systems for home or small business use.
+A simple, educational, and practical **solar calculator** for estimating installation size, monthly savings, and payback period of solar panel systems — designed for **homeowners, small businesses, and beginners** interested in solar energy.
 
-🔗 Live Demo: [https://mpplearning.github.io/SolarCalculation/](https://mpplearning.github.io/SolarCalculation/)
+🔗 **Live Demo:**  
+[https://mpplearning.github.io/SolarCalculation/](https://mpplearning.github.io/SolarCalculation/)
+
+---
 
 ## 💡 Features
-✅ Supports three system types: On-Grid, Off-Grid, and Hybrid  
-✅ On-Grid system calculator completed and fully functional  
-🚧 Off-Grid and Hybrid calculators – Coming soon  
-✅ Two calculation modes:
-- Quick estimate from monthly electricity bill
-- Detailed input with system parameters  
-✅ Responsive design (desktop and mobile)  
-✅ Clear summary of estimated energy production, savings, and ROI  
-✅ Thai-language UI for accessibility and understanding
 
-## 💻 Code Structure
-- `index.html` – Entry page for selecting system type  
-- `on-grid.html` – Full On-Grid calculator (complete)  
-- `off-grid.html` – Placeholder for Off-Grid (coming soon)  
-- `hybrid.html` – Placeholder for Hybrid (coming soon)  
-- `styles.css` – Styling and responsive layout  
-- `script.js` – Calculation logic, event handling, and input validation  
+- ✅ Supports **3 system types**:
+  - On-Grid (**Demo Version – Functional**)
+  - Off-Grid (**Demo Version – Functional**)
+  - Hybrid (**Coming soon**)
+
+- ✅ **Two calculation modes**:
+  - Quick estimate using monthly electricity bill
+  - Detailed input with device-level usage (time-based)
+
+- ✅ Responsive and mobile-friendly design
+
+- ✅ Smart results summary:
+  - Estimated power usage (day vs night)
+  - Suggested installation size
+  - Estimated monthly savings
+  - ⚙️ Payback calculation module **(coming soon)**
+
+- ✅ Clean, user-friendly **Thai-language interface**
+
+---
+
+## 🧱 Code Structure
+
+| File | Purpose |
+|------|---------|
+| `index.html` | Landing page for system selection |
+| `on-grid.html` | Main calculator for On-Grid systems |
+| `off-grid.html` | Placeholder for Off-Grid calculator |
+| `hybrid.html` | Placeholder for Hybrid system |
+| `styles.css` / `offstyles.css` | Custom responsive styles |
+| `script.js` | JavaScript logic for calculations and interactivity |
+
+---
 
 ## 👤 Author
-Created and maintained by **mpplearning** (Manussapol Punmanee)
 
-This tool was built for educational and professional use, especially tailored for Thai users and solar energy beginners looking to explore system design and ROI.
+Developed by **mpplearning**  
+📛 Manussapol Punmanee  
+📧 Email: [punmanee@gmail.com](mailto:punmanee@gmail.com)
 
-## 📄 License & Usage Policy
+This tool is created for **educational** and **professional use**, especially for **Thai users** exploring solar energy system design, budgeting, and financial returns.
 
-This project uses a **custom MIT-based license for non-commercial use**.
-You are free to view, use, and learn from the code for **personal or educational purposes**.
-🚫 **Commercial use, redistribution, or the creation of derivative tools for sale or business purposes is not allowed** without explicit permission.
-If you wish to use this project in your business, products, or public deployment, please contact:
-📧 punmanee@gmail.com (or via GitHub profile)
+---
 
+## 📄 License & Usage
+
+This project uses a **custom MIT-style license** for **non-commercial use only**.
+
+- ✅ Free to **view, use, and modify** for:
+  - Personal learning
+  - Classroom use
+  - Non-commercial research
+
+- 🚫 **Commercial use, resale, or redistribution** is **not allowed** without explicit permission.
+
+If you wish to use this project commercially or deploy it for clients, please **contact the author directly**.
+
+---
+
+> 💬 For feedback, contributions, or collaboration — feel free to reach out via GitHub or email.
