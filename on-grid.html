@@ -1,5 +1,5 @@
 <!--
-SolarCalculation v4.0 by mpplearning
+SolarCalculation v4.2 On-Grid by mpplearning
 License: Non-Commercial Use Only
 Contact: punmanee@gmail.com
 -->
@@ -7,86 +7,96 @@ Contact: punmanee@gmail.com
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ On-Grid</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบ On-Grid (Demo Version)</title>
+  <link rel="stylesheet" href="offstyles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ระบบ On-Grid</h1>
-        <div id="onGridCalculator">
-            <!-- Form input and result area will go here -->
-            <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a>
+  <div class="container">
+    <h1>🔋 ระบบ On-Grid (Demo Version)</h1>
+
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label for="monthlyBill">💰 ค่าไฟต่อเดือน (บาท):</label>
+        <input type="text" id="monthlyBill" placeholder="เช่น 4,000" title="กรอกจำนวนค่าไฟต่อเดือน เช่น 4000">
+      </div>
+
+      <div class="form-group">
+        <label for="dayUsagePercent">☀️ สัดส่วนการใช้ไฟช่วง 10:00–15:00 (%):</label>
+        <input type="number" id="dayUsagePercent" placeholder="เช่น 30" min="0" max="100" title="ระบุเป็นเปอร์เซ็นต์ระหว่าง 0 ถึง 100">
+      </div>
+
+      <div class="button-row">
+        <button id="calculateBtn">คำนวณ</button>
+        <button class="clear" id="resetBtn">ล้างข้อมูล</button>
+      </div>
+    </form>
+
+    <div id="results" class="results-box"></div><br>
+
+    <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button><br><br>
+    <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
+
+    <div id="detailedSection" style="display: none; margin-top: 20px;">
+      <fieldset>
+        <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 10:00–15:00 น. (5 ชั่วโมง/วัน)</h3></legend>
+        <div id="deviceList"></div>
+
+        <div style="margin-top: 10px;">
+          <div class="form-group">
+            <label>ชื่ออุปกรณ์:
+              <select id="deviceSelect_day">
+                <option value="">-- เลือกอุปกรณ์ --</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>ชั่วโมงใช้งาน/วัน:</label><br>
+            <input type="number" id="deviceHoursDayHour" placeholder="ชั่วโมง" style="width: 80px;" title="จำนวนชั่วโมง"> ชั่วโมง
+            <input type="number" id="deviceHoursDayMin" placeholder="นาที" style="width: 80px;" title="จำนวนนาที"> นาที
+          </div>
+
+          <button onclick="addSelectedDevice('day')">➕ เพิ่มอุปกรณ์</button>
+          <button class="clear" onclick="resetFormLoad('day')">ล้างข้อมูล</button>
         </div>
-        <!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมคำนวณระบบโซลาร์เซลล์ Version 4.0</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>โปรแกรมคำนวณระบบโซลาร์เซลล์ Version 4.0</h1>
+      </fieldset>
 
-        <section id="onGridSection">
-            <h2>1️⃣ คำนวณจากค่าไฟต่อเดือน</h2>
-            <label for="monthlyBillSimple">ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
-            <input type="text" id="monthlyBillSimple" placeholder="เช่น 3,000">
-            <div style="display: flex; gap: 10px;">
-                <button onclick="calculateRecommendation()">คำนวณ</button>
-                <button class="clear" onclick="clearRecommendation()">ล้างข้อมูล</button>
-            </div>
+      <hr style="margin: 30px 0; border-top: 3px solid green;">
 
-            <div id="recommendationResult"></div>
-            </section>
+      <fieldset>
+        <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 15:01–09:59 น. (19 ชั่วโมง/วัน)</h3></legend>
+        <div id="nideviceList"></div>
 
-            <p class="remark" style="color: green; font-size: 0.9em;">
-            <strong>Remark:</strong> การคำนวณนี้อิงจากค่าไฟ 4.5 บาท/หน่วย, แดดเฉลี่ย 5 ชม./วัน และประสิทธิภาพการรับแสง 80% โดยเชื่อมต่อกับระบบ On-grid สำหรับการใช้งานช่วงกลางวันเท่านั้น (ไม่รวมการเก็บไฟไว้ใช้กลางคืน)
-            </p>
+        <div style="margin-top: 10px;">
+          <div class="form-group">
+            <label>ชื่ออุปกรณ์:
+              <select id="deviceSelect_night">
+                <option value="">-- เลือกอุปกรณ์ --</option>
+              </select>
+            </label>
+          </div>
 
-            <p class="remark" style="color: gray; font-size: 0.9em;">
-            <strong>Remark:</strong> เป็นค่าประมาณที่ได้จากฐานข้อมูลจริง โดยรวมค่าความสูญเสียเฉลี่ยไว้แล้ว หากต้องการผลลัพธ์ที่แม่นยำและปรับตามสภาพแวดล้อมจริงของคุณ แนะนำให้ใช้การคำนวณแบบละเอียดด้านล่าง
-            </p>
+          <div class="form-group">
+            <label>ชั่วโมงใช้งาน/วัน:</label><br>
+            <input type="number" id="deviceHoursNightHour" placeholder="ชั่วโมง" style="width: 80px;" title="จำนวนชั่วโมง"> ชั่วโมง
+            <input type="number" id="deviceHoursNightMin" placeholder="นาที" style="width: 80px;" title="จำนวนนาที"> นาที
+          </div>
 
-        <hr>
+          <button onclick="addSelectedDevice('night')">➕ เพิ่มอุปกรณ์</button>
+          <button class="clear" onclick="resetFormLoad('night')">ล้างข้อมูล</button>
+        </div>
+      </fieldset>
 
-        <section id="onGridSection">
-            <h2>2️⃣ คำนวณแบบละเอียด</h2>
+      <button onclick="calculateTotalLoad()" style="margin-top: 10px;">📊 คำนวณโหลดรวม</button>
+      <button onclick="clearTotalLoad()" class="clear">🧹 ล้างข้อมูลคำนวณโหลดรวม</button>
+      <div id="resultArea" style="margin-top: 10px;"></div><br>
 
-            <label>ค่าไฟที่จ่ายต่อเดือน (บาท):</label>
-            <input type="text" id="monthlyBill" placeholder="เช่น 2,000">
-
-            <label>ขนาดระบบ (kW):</label>
-            <input type="text" id="systemSize" placeholder="เช่น 5">
-
-            <label>ราคาติดตั้ง (บาท):</label>
-            <input type="text" id="installationCost" placeholder="เช่น 150,000">
-
-            <label>ค่าไฟต่อหน่วย (บาท):</label>
-            <input type="text" id="electricityRate" placeholder="เช่น 4.5">
-
-            <label>ชั่วโมงแดดเฉลี่ยต่อวัน:</label>
-            <input type="text" id="sunHours" placeholder="เช่น 5">
-
-            <label>ประสิทธิภาพการรับแสง (%):</label>
-            <input type="text" id="efficiency" placeholder="เช่น 80">
-
-            <div style="display: flex; gap: 10px;">
-                <button onclick="calculate()">คำนวณ</button>
-                <button class="clear" onclick="clearForm()">ล้างข้อมูล</button>
-            </div>
-
-            <div id="result" class="result-box"></div>
-        </section>
-        <p class="remark">
-        <strong>Remark:</strong> การคำนวณนี้อิงจากการคำนวณจากการใช้งานไฟฟ้าในช่วงกลางวัน โดยเชื่อมต่อกับการไฟฟ้า (On-grid) และไม่รวมการเก็บไฟไว้ใช้กลางคืน
-        </p>
-
+      <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
     </div>
-    <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a>
-    <script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
