@@ -81,7 +81,7 @@ button.clear {
 .results-box {
   margin-top: 30px;
   padding: 20px;
-  background-color: #eaf4fc;
+  background-color: #e6f9e6; /* ✅ เปลี่ยนสีตรงนี้ */
   border-left: 6px solid #2b5876;
   border-radius: 5px;
   white-space: pre-line;
