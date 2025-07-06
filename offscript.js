@@ -1,9 +1,9 @@
-// SolarCalculation v4.0 by mpplearning
+// SolarCalculation v4.2 by mpplearning
 // License: Non-Commercial Use Only
 // Contact: punmanee@gmail.com
 
 function calculateOffGrid() {
-    const bill = parseFloat(document.getElementById("monthlyBill").value);
+    const bill = parseFloat(document.getElementById("monthlyBill").value.replace(/,/g, ''));
     const hours = parseFloat(document.getElementById("backupHours").value);
     const resultDiv = document.getElementById("results");
     resultDiv.innerHTML = "";
@@ -18,31 +18,40 @@ function calculateOffGrid() {
         return;
     }
 
-    const unitRate = 4.5; // หน่วยละ 4.5 บาท
+    const unitRate = 4.5;
     const avgSunHours = 5;
     const systemEfficiency = 0.8;
     const voltage = 48;
 
     const monthlyUsageKWh = bill / unitRate;
     const dailyUsageKWh = monthlyUsageKWh / 30;
-    const requiredEnergy = (dailyUsageKWh / 24) * hours;
+    const dayUsage = (dailyUsageKWh / 24) * 5;
+    const nightUsage = (dailyUsageKWh / 24) * hours;
+    const requiredEnergy = nightUsage;
     const batteryAh = (requiredEnergy * 1000) / voltage;
     const solarKW = requiredEnergy / avgSunHours;
     const dailySolarKWh = solarKW * avgSunHours;
     const chargePerHourAh = (solarKW * 1000 / voltage) * systemEfficiency;
+    const solarProduction = dailySolarKWh * systemEfficiency;
+    const remainingEnergy = solarProduction - dayUsage;
+    const chargeTimeHours = batteryAh / chargePerHourAh;
+    const solarKWFullSystem = dailyUsageKWh / (avgSunHours * systemEfficiency);
 
     const format = num => num.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
     const result = `
-        ✅ พลังงานใช้ต่อวันโดยประมาณ: ${format(dailyUsageKWh)} kWh
-        ✅ ต้องสำรองไฟไว้ใช้ ${hours} ชั่วโมง/วัน คิดเป็นพลังงาน ${format(requiredEnergy)} kWh
-        ✅ ขนาดแบตเตอรี่ที่แนะนำ: ประมาณ ${format(batteryAh)} Ah (ที่ 48V)
-        ✅ ขนาดแผงโซล่าร์ที่แนะนำ: ประมาณ ${format(solarKW)} kW
-        ✅ สามารถผลิตไฟฟ้าได้ต่อวัน: ประมาณ ${format(dailySolarKWh)} kWh
-        ✅ และชาร์จเข้าสู่แบตเตอรี่ได้ประมาณ: ${format(chargePerHourAh)} Ah/ชั่วโมง
+    ✅ พลังงานใช้ต่อวันโดยประมาณ: ${format(dailyUsageKWh)} kWh  
+    ☀️ พลังงานใช้ช่วง 10:00–15:00 (Peak Sun Hours): ${format(dayUsage)} kWh  
+    🌙 พลังงานที่ต้องสำรองไว้ใช้ ${hours} ชั่วโมง: ${format(nightUsage)} kWh  
+    🔋 ความจุแบตเตอรี่ที่แนะนำ: ประมาณ ${format(batteryAh)} Ah @48V  
+    ☀️ ขนาดแผงโซล่าร์เซลล์ที่แนะนำ (สำหรับกลางวัน): ${format(solarKW)} kW  
+    ⚡️ ผลิตไฟฟ้าได้จริงจากแผงนี้: ${format(solarProduction)} kWh/วัน  
+    🔌 เหลือพลังงานสำหรับชาร์จแบต: ${format(remainingEnergy)} kWh  
+    ⏱️ ต้องใช้เวลาชาร์จแบตฯ ${format(chargeTimeHours)} ชั่วโมง (หากใช้แผงตามนี้)  
+    📈 หากต้องการใช้ + ชาร์จแบตให้ครบภายใน 1 วัน ควรใช้แผงขนาด: ${format(solarKWFullSystem)} kW  
 
-📝 หมายเหตุ: คำนวณจากแดดเฉลี่ย ${avgSunHours} ชั่วโมง/วัน และประสิทธิภาพระบบ ${systemEfficiency * 100}%
-`;
+    📝 หมายเหตุ: คำนวณจากแดดเฉลี่ย ${avgSunHours} ชั่วโมง/วัน (Peak Sun Hours 10:00–15:00) และประสิทธิภาพระบบ ${systemEfficiency * 100}%
+    `;
 
     resultDiv.innerHTML = `<div class="result-box">${result}</div>`;
 }
@@ -53,14 +62,9 @@ function resetForm() {
     document.getElementById("results").innerHTML = "";
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleBtn = document.getElementById("toggleDetailBtn");
-    const detailSection = document.getElementById("detailedSection");
-
-    toggleBtn.addEventListener("click", () => {
-        detailSection.style.display = detailSection.style.display === "none" ? "block" : "none";
-    });
-});
+// SolarCalculation v4.2 by mpplearning
+// License: Non-Commercial Use Only
+// Contact: punmanee@gmail.com
 
 let devicesDay = [];
 let devicesNight = [];
@@ -96,51 +100,82 @@ const deviceOptions = {
     "เตารีดไอน้ำ": 1800
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    const selects = ["deviceSelect", "nideviceSelect"];
-    selects.forEach(selectId => {
-        const select = document.getElementById(selectId);
-        for (const name in deviceOptions) {
-            const option = document.createElement("option");
-            option.value = name;
-            option.textContent = name;
-            select.appendChild(option);
-        }
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("toggleDetailBtn");
+    const detailSection = document.getElementById("detailedSection");
+
+    if (toggleBtn && detailSection) {
+        toggleBtn.addEventListener("click", () => {
+            detailSection.style.display = detailSection.style.display === "none" ? "block" : "none";
+        });
+    }
+
+    const daySelect = document.getElementById("deviceSelect_day");
+    const nightSelect = document.getElementById("deviceSelect_night");
+    for (let key in deviceOptions) {
+        const opt1 = new Option(key, key);
+        const opt2 = new Option(key, key);
+        if (daySelect) daySelect.appendChild(opt1);
+        if (nightSelect) nightSelect.appendChild(opt2);
+    }
+
+    const monthlyBillInput = document.getElementById("monthlyBill");
+    if (monthlyBillInput) {
+        monthlyBillInput.addEventListener("input", function () {
+            let raw = this.value.replace(/,/g, '');
+            if (!isNaN(raw) && raw !== "") {
+                this.value = parseFloat(raw).toLocaleString();
+            } else if (raw === "") {
+                this.value = "";
+            }
+        });
+    }
 });
 
 function addSelectedDevice(type) {
-    const name = document.getElementById(type === 'day' ? "deviceSelect" : "nideviceSelect").value;
-    const power = deviceOptions[name];
-    const hours = parseFloat(document.getElementById(type === 'day' ? "deviceHoursDay" : "deviceHoursNight").value);
+    let name, power, hours;
 
-    if (!name || isNaN(power) || isNaN(hours)) {
-        document.getElementById("resultArea").innerHTML = `
-            <div style="color: red; border: 1px solid red; padding: 10px; border-radius: 8px; background-color: #ffe5e5;">
-              ⚠️ <strong>กรุณาเลือกอุปกรณ์และกรอกชั่วโมงการใช้งานให้ครบถ้วน</strong>
-            </div>
-        `;
-        return;
+    const selectId = type === 'day' ? 'deviceSelect_day' : 'deviceSelect_night';
+    const customNameId = type === 'day' ? 'customDeviceName_day' : 'customDeviceName_night';
+    const customPowerId = type === 'day' ? 'customDevicePower_day' : 'customDevicePower_night';
+    const hourId = type === 'day' ? 'deviceHoursDayHour' : 'deviceHoursNightHour';
+    const minId = type === 'day' ? 'deviceHoursDayMin' : 'deviceHoursNightMin';
+
+    const selected = document.getElementById(selectId).value;
+
+    if (selected === 'custom') {
+        name = document.getElementById(customNameId).value;
+        power = parseFloat(document.getElementById(customPowerId).value);
+    } else {
+        name = selected;
+        power = deviceOptions[selected];
     }
 
-    const targetArray = type === 'day' ? devicesDay : devicesNight;
-    targetArray.push({ name, power, hours });
+    const hour = parseFloat(document.getElementById(hourId).value) || 0;
+    const min = parseFloat(document.getElementById(minId).value) || 0;
+    hours = hour + (min / 60);
+
+    if (!name || isNaN(power) || isNaN(hours)) return;
+
+    const device = { name, power, hours, hourRaw: hour, minRaw: min };
+    if (type === 'day') {
+        devicesDay.push(device);
+    } else {
+        devicesNight.push(device);
+    }
+
     renderDevices(type);
 }
 
 function renderDevices(type) {
-    const list = document.getElementById(type === 'day' ? "deviceList" : "nideviceList");
-    const source = type === 'day' ? devicesDay : devicesNight;
-    list.innerHTML = "";
+    const listId = type === 'day' ? 'deviceList' : 'nideviceList';
+    const arr = type === 'day' ? devicesDay : devicesNight;
+    const listDiv = document.getElementById(listId);
 
-    source.forEach((d, i) => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            ${i + 1}. ${d.name} | ${d.power}W | ${d.hours} ชั่วโมง/วัน 
-            <span onclick="removeDevice('${type}', ${i})" style="color:red; cursor: pointer; margin-left:10px;">❌</span>
-        `;
-        list.appendChild(div);
-    });
+    listDiv.innerHTML = arr.map((d, index) =>
+        `<div>${d.name} — ${d.power}W × ${d.hourRaw} ชม. ${d.minRaw} นาที 
+         <button onclick="removeDevice('${type}', ${index})">❌</button></div>`
+    ).join("");
 }
 
 function removeDevice(type, index) {
@@ -151,24 +186,39 @@ function removeDevice(type, index) {
 
 function resetFormLoad(type) {
     if (type === 'day') {
-        document.getElementById("deviceSelect").value = "";
-        document.getElementById("deviceHoursDay").value = "";
+        // เคลียร์ค่าทั้งหมดของช่วงกลางวัน
+        document.getElementById("deviceSelect_day").value = "";
+        if (document.getElementById("customDeviceName_day")) document.getElementById("customDeviceName_day").value = "";
+        if (document.getElementById("customDevicePower_day")) document.getElementById("customDevicePower_day").value = "";
+        if (document.getElementById("deviceHoursDayHour")) document.getElementById("deviceHoursDayHour").value = "";
+        if (document.getElementById("deviceHoursDayMin")) document.getElementById("deviceHoursDayMin").value = "";
+
+        // ลบข้อมูลอุปกรณ์ที่เลือกไว้
         devicesDay = [];
-        document.getElementById("deviceList").innerHTML = "";
+        renderDevices('day');
     } else {
-        document.getElementById("nideviceSelect").value = "";
-        document.getElementById("deviceHoursNight").value = "";
+        // เคลียร์ค่าทั้งหมดของช่วงกลางคืน
+        document.getElementById("deviceSelect_night").value = "";
+        if (document.getElementById("customDeviceName_night")) document.getElementById("customDeviceName_night").value = "";
+        if (document.getElementById("customDevicePower_night")) document.getElementById("customDevicePower_night").value = "";
+        if (document.getElementById("deviceHoursNightHour")) document.getElementById("deviceHoursNightHour").value = "";
+        if (document.getElementById("deviceHoursNightMin")) document.getElementById("deviceHoursNightMin").value = "";
+
+        // ลบข้อมูลอุปกรณ์ที่เลือกไว้
         devicesNight = [];
-        document.getElementById("nideviceList").innerHTML = "";
+        renderDevices('night');
     }
+
+    // ล้างผลการคำนวณรวม
     document.getElementById("resultArea").innerHTML = "";
 }
+
 
 function calculateTotalLoad() {
     const allDevices = [...devicesDay, ...devicesNight];
     if (allDevices.length === 0) {
         document.getElementById("resultArea").innerHTML = `
-            <div style="color: red; border: 1px solid red; padding: 10px; border-radius: 8px; background-color: #ffe5e5;">
+            <div class="error-boxload">
                 ⚠️ <strong>กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</strong><br>
                 ❌ ยังไม่มีรายการอุปกรณ์ไฟฟ้าที่ต้องการคำนวณ
             </div>
@@ -196,30 +246,23 @@ function calculateTotalLoad() {
     const nightKWh = nightWh / 1000;
     const dayKWh = dayWh / 1000;
 
-    const panelSize = (kWh / 5 / 0.8); // system size in kW
-    const batteryAh = (nightKWh * 1000 / 48); // 48V system (คำนวณจากโหลดกลางคืน)
+    const panelSize = kWh / 5 / 0.8;
+    const batteryAh = nightKWh * 1000 / 48;
     const chargePerHourAh = (panelSize * 1000 / 48) * 0.8;
     const dailySolarKWh = panelSize * 5;
-
-    // ใหม่: คำนวณความจุแบตเตอรี่ที่ “ควรใช้” เพื่อสำรอง 19 ชั่วโมง
     const requiredBatteryAh = nightKWh * 1000 / 48;
-    const avgPowerNight = nightWh / 19; // W
+    const avgPowerNight = nightWh / 19;
     const nightBackupHours = (batteryAh * 48) / avgPowerNight;
-
-  
-
-
     const approxBill = kWh * 4.5 * 30;
     const format = num => num.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
     let warningText = "";
     if (nightBackupHours < 19) {
-    warningText = `
-    <br><span style="color:red;"><b>⚠️ หมายเหตุ:</b> ความจุแบตเตอรี่ในระบบนี้สามารถสำรองได้เพียง ${format(nightBackupHours)} ชั่วโมง ซึ่งไม่ครบ 1 รอบกลางคืน (19 ชั่วโมง)</span>
-    <br><span style="color:darkred;"><b>🔋 เพื่อสำรองไฟให้ครบ 19 ชั่วโมง</b> ควรใช้แบตเตอรี่ขนาดอย่างน้อย <b>${format(requiredBatteryAh)} Ah @48V</b></span>
-    `;
-}
-
+        warningText = `
+        <br><span style="color:red;"><b>⚠️ หมายเหตุ:</b> ความจุแบตเตอรี่ในระบบนี้สามารถสำรองได้เพียง ${format(nightBackupHours)} ชั่วโมง ซึ่งไม่ครบ 1 รอบกลางคืน (19 ชั่วโมง)</span>
+        <br><span style="color:darkred;"><b>🔋 เพื่อสำรองไฟให้ครบ 19 ชั่วโมง</b> ควรใช้แบตเตอรี่ขนาดอย่างน้อย <b>${format(requiredBatteryAh)} Ah @48V</b></span>
+        `;
+    }
 
     document.getElementById("resultArea").innerHTML = `
         ⚡️ พลังงานใช้ช่วงกลางวัน (10:00–15:00): <b>${format(dayKWh)} kWh</b><br>
@@ -240,5 +283,11 @@ function calculateTotalLoad() {
     `;
 }
 
+function clearTotalLoad() {
+    devicesDay = [];
+    devicesNight = [];
 
-
+    document.getElementById("deviceList").innerHTML = "";
+    document.getElementById("nideviceList").innerHTML = "";
+    document.getElementById("resultArea").innerHTML = "";
+}
