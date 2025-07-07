@@ -1,3 +1,4 @@
+
 /* 
   SolarCalculation v4.2 by mpplearning
   License: Non-Commercial Use Only
@@ -5,140 +6,150 @@
 */
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f2f6f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 20px;
-}
-
-.container {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-h1 {
-  text-align: center;
-  color: #2b5876;
-}
-
-h3 {
-  margin-top: 20px;
-  color: #003366;
-  border-left: 5px solid #0066cc;
-  padding-left: 10px;
-}
-
-label {
-  display: block;
-  margin-top: 15px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.button-row {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 button {
   background-color: #0d3b66;
-  color: white;
-  padding: 8px 14px;
   border: none;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   margin: 4px 6px;
+  padding: 8px 14px;
   transition: 0.3s;
+}
+
+button.clear {
+  background-color: #888;
 }
 
 button:hover {
   background-color: #005a9c;
 }
 
-button.clear {
-  background-color: #666;
-}
-
-.results-box {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #eaf4fc;
-  border-left: 6px solid #2b5876;
-  border-radius: 5px;
-  white-space: pre-line;
+.container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: auto;
+  max-width: 600px;
+  padding: 30px;
 }
 
 .error-box,
 .error-boxload {
   background-color: #ffe5e5;
-  color: #cc0000;
-  padding: 15px;
   border-radius: 6px;
+  color: #cc0000;
   font-weight: bold;
-  margin-top: 10px;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+}
+
+h1 {
+  color: #2b5876;
+  text-align: center;
+  font-size: 1.8em;
+}
+
+h3 {
+  border-left: 5px solid #0066cc;
+  color: #003366;
+  margin-top: 20px;
+  padding-left: 10px;
+  font-size: 1.2em;
 }
 
 hr {
+  background-color: #00a000;
   border: none;
   height: 3px;
-  background-color: #00a000;
   margin: 30px 0;
 }
 
-#deviceList div,
-#nideviceList div {
-  margin: 4px 0;
-  padding: 6px 10px;
-  background-color: #f3f3f3;
-  border-left: 4px solid #007acc;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  width: 100%;
+  font-size: 15px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-size: 15px;
+}
+
+.results-box {
+  background-color: #eaf4fc;
+  border-left: 6px solid #2b5876;
+  border-radius: 5px;
+  margin-top: 30px;
+  padding: 20px;
+  white-space: pre-line;
 }
 
 #deviceList button,
 #nideviceList button {
   background-color: transparent;
+  border: none;
   color: red;
+  cursor: pointer;
   font-size: 10px;
   padding: 0 8px;
-  border: none;
-  cursor: pointer;
 }
 
 #deviceList button:hover,
 #nideviceList button:hover {
-  color: darkred;
   background-color: transparent;
+  color: darkred;
+}
+
+#deviceList div,
+#nideviceList div {
+  align-items: center;
+  background-color: #f3f3f3;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  padding: 6px 10px;
 }
 
 #resultArea {
   background-color: #e9f7ef;
   border: 1px solid #b2dfdb;
-  padding: 12px;
   border-radius: 8px;
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 12px;
 }
 
 #resultArea b {
   color: #004466;
 }
 
-button.clear {
-  background-color: #888;
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
 }
