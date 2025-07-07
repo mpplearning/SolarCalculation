@@ -8,11 +8,11 @@ function calculateOffGrid() {
     const resultDiv = document.getElementById("results");
     resultDiv.innerHTML = "";
 
-    if (isNaN(bill) || isNaN(hours) || bill <= 0 || hours <= 0) {
+    if (isNaN(bill) || isNaN(hours) || bill <= 0 || hours <= 0 || hours >= 20) {
         resultDiv.innerHTML = `
             <div class="error-box">
                 ⚠️ <strong>กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</strong><br>
-                ❌ ค่าไฟและชั่วโมงต้องมีจำนวนมากกว่า 0
+                ❌ ค่าไฟต้องมีค่ามากกว่า 0 และชั่วโมงต้องมีจำนวนระหว่าง 1-19
             </div>
         `;
         return;
@@ -70,34 +70,44 @@ let devicesDay = [];
 let devicesNight = [];
 
 const deviceOptions = {
-    "หลอดไฟ LED 15W": 15,
-    "ทีวี 50 นิ้ว": 150,
-    "ทีวี 55 นิ้ว": 200,
-    "ทีวี 65 นิ้ว": 250,
-    "ทีวี 75 นิ้ว": 300,
-    "ทีวี 85 นิ้ว": 400,
-    "แอร์ 9000 BTU (เบอร์ 5)": 800,
-    "แอร์ 12000 BTU (เบอร์ 5)": 1000,
-    "แอร์ 15000 BTU (เบอร์ 5)": 1300,
-    "แอร์ 18000 BTU (เบอร์ 5)": 1500,
-    "แอร์ 24000 BTU (เบอร์ 5)": 1800,
-    "แอร์ 36000 BTU (เบอร์ 5)": 2500,
-    "ตู้เย็น 7 คิว": 120,
-    "ตู้เย็น 12 คิว": 180,
-    "ตู้เย็น 15 คิว": 250,
-    "ตู้เย็น 18 คิว": 300,
-    "ตู้เย็น 21 คิว": 350,
-    "พัดลมตั้งพื้น": 70,
-    "โน๊ตบุ๊ค": 100,
-    "คอมพิวเตอร์ตั้งโต๊ะ": 600,
-    "เครื่องซักผ้า": 500,
-    "เครื่องทำน้ำอุ่น": 3500,
-    "ไมโครเวฟ": 1500,
-    "หม้อหุงข้าว": 700,
-    "เครื่องฟอกอากาศ": 45,
-    "ชาร์จมือถือ": 10,
-    "รถ EV ชาร์จช้า": 2200,
-    "เตารีดไอน้ำ": 1800
+  "กล้องวงจรปิด 1 ตัว": 15,
+  "คอมพิวเตอร์ตั้งโต๊ะ": 600,
+  "ชาร์จมือถือ": 10,
+  "ตู้เย็น 7 คิว": 120,
+  "ตู้เย็น 12 คิว": 180,
+  "ตู้เย็น 15 คิว": 250,
+  "ตู้เย็น 18 คิว": 300,
+  "ตู้เย็น 21 คิว": 350,
+  "ทีวี 50 นิ้ว": 150,
+  "ทีวี 55 นิ้ว": 200,
+  "ทีวี 65 นิ้ว": 250,
+  "ทีวี 75 นิ้ว": 300,
+  "ทีวี 85 นิ้ว": 400,
+  "พัดลมตั้งพื้น": 70,
+  "พัดลมเพดาน": 85,
+  "รถ EV ชาร์จช้า": 2200,
+  "หลอดไฟ LED 15W": 15,
+  "หม้อทอดไร้น้ำมัน": 1500,
+  "หม้อหุงข้าว": 700,
+  "ไมโครเวฟ": 1500,
+  "เครื่องกรองน้ำ": 30,
+  "เครื่องชงกาแฟ": 1000,
+  "เครื่องซักผ้า": 500,
+  "เครื่องดูดฝุ่น": 1200,
+  "เครื่องทำน้ำอุ่น": 3500,
+  "เครื่องฟอกอากาศ": 45,
+  "เครื่องอบผ้า": 1800,
+  "เครื่องปิ้งขนมปัง": 800,
+  "เตารีดไอน้ำ": 1800,
+  "เตาอบไฟฟ้า (60 ลิตร)": 2200,
+  "เตาแม่เหล็กไฟฟ้า (Induction)": 2000,
+  "แอร์ 9000 BTU (เบอร์ 5)": 800,
+  "แอร์ 12000 BTU (เบอร์ 5)": 1000,
+  "แอร์ 15000 BTU (เบอร์ 5)": 1300,
+  "แอร์ 18000 BTU (เบอร์ 5)": 1500,
+  "แอร์ 24000 BTU (เบอร์ 5)": 1800,
+  "แอร์ 36000 BTU (เบอร์ 5)": 2500,
+  "โน๊ตบุ๊ค": 100
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -140,6 +150,10 @@ function addSelectedDevice(type) {
     const customPowerId = type === 'day' ? 'customDevicePower_day' : 'customDevicePower_night';
     const hourId = type === 'day' ? 'deviceHoursDayHour' : 'deviceHoursNightHour';
     const minId = type === 'day' ? 'deviceHoursDayMin' : 'deviceHoursNightMin';
+    const errorId = type === 'day' ? 'error_day' : 'error_night';
+
+    const errorEl = document.getElementById(errorId);
+    errorEl.textContent = ""; // ล้างข้อความเก่าก่อน
 
     const selected = document.getElementById(selectId).value;
 
@@ -153,9 +167,27 @@ function addSelectedDevice(type) {
 
     const hour = parseFloat(document.getElementById(hourId).value) || 0;
     const min = parseFloat(document.getElementById(minId).value) || 0;
-    hours = hour + (min / 60);
 
-    if (!name || isNaN(power) || isNaN(hours)) return;
+    // ตรวจสอบค่าติดลบ
+    if (hour < 0 || min < 0) {
+        errorEl.textContent = "⛔ กรุณาอย่าใส่ค่าติดลบ";
+        return;
+    }
+
+    hours = hour + (min / 60);
+    const maxHours = type === 'day' ? 5 : 19;
+
+    // ตรวจสอบเกินช่วงเวลา
+    if (hours > maxHours) {
+        errorEl.textContent = `⚠️ ช่วงเวลา ${type === 'day' ? "10:00–15:00" : "15:01–09:59"} ใช้ได้ไม่เกิน ${maxHours} ชั่วโมง`;
+        return;
+    }
+
+    // ตรวจสอบค่าผิดพลาดอื่น ๆ
+    if (!name || isNaN(power) || isNaN(hours) || hours <= 0) {
+        errorEl.textContent = "⚠️ กรุณาระบุชื่ออุปกรณ์, กำลังไฟ และเวลาใช้งานให้ถูกต้อง";
+        return;
+    }
 
     const device = { name, power, hours, hourRaw: hour, minRaw: min };
     if (type === 'day') {
@@ -165,6 +197,14 @@ function addSelectedDevice(type) {
     }
 
     renderDevices(type);
+
+    // ล้างข้อมูลที่กรอกไว้ (optional)
+    document.getElementById(hourId).value = "";
+    document.getElementById(minId).value = "";
+    if (selected === 'custom') {
+        document.getElementById(customNameId).value = "";
+        document.getElementById(customPowerId).value = "";
+    }
 }
 
 function renderDevices(type) {
@@ -192,6 +232,7 @@ function resetFormLoad(type) {
         if (document.getElementById("customDevicePower_day")) document.getElementById("customDevicePower_day").value = "";
         if (document.getElementById("deviceHoursDayHour")) document.getElementById("deviceHoursDayHour").value = "";
         if (document.getElementById("deviceHoursDayMin")) document.getElementById("deviceHoursDayMin").value = "";
+        if (document.getElementById("error_day")) document.getElementById("error_day").textContent = "";
 
         // ลบข้อมูลอุปกรณ์ที่เลือกไว้
         devicesDay = [];
@@ -203,7 +244,8 @@ function resetFormLoad(type) {
         if (document.getElementById("customDevicePower_night")) document.getElementById("customDevicePower_night").value = "";
         if (document.getElementById("deviceHoursNightHour")) document.getElementById("deviceHoursNightHour").value = "";
         if (document.getElementById("deviceHoursNightMin")) document.getElementById("deviceHoursNightMin").value = "";
-
+        if (document.getElementById("error_night")) document.getElementById("error_night").textContent = "";
+        
         // ลบข้อมูลอุปกรณ์ที่เลือกไว้
         devicesNight = [];
         renderDevices('night');
