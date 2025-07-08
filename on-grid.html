@@ -1,155 +1,109 @@
+<!--
+SolarCalculation v4.2 On-Grid by mpplearning
+License: Non-Commercial Use Only
+Contact: punmanee@gmail.com
+-->
 
-/* 
-  SolarCalculation v4.2 by mpplearning
-  License: Non-Commercial Use Only
-  Contact: punmanee@gmail.com
-*/
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบ On-Grid (Demo Version)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔋 ระบบ On-Grid (Demo Version)</h1>
 
-body {
-  background-color: #f2f6f9;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 20px;
-  font-size: 15px;
-  line-height: 1.5;
-}
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label for="monthlyBill">💰 ค่าไฟต่อเดือน (บาท):</label>
+        <input type="text" id="monthlyBill" placeholder="เช่น 4,000" title="กรอกจำนวนค่าไฟต่อเดือน เช่น 4000">
+      </div>
 
-button {
-  background-color: #0d3b66;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  font-size: 15px;
-  margin: 4px 6px;
-  padding: 8px 14px;
-  transition: 0.3s;
-}
+      <div class="form-group">
+        <label for="dayUsagePercent">☀️ สัดส่วนการใช้ไฟช่วง 10:00–15:00 (%):</label>
+        <input type="number" id="dayUsagePercent" placeholder="เช่น 30" min="0" max="100" title="ระบุเป็นเปอร์เซ็นต์ระหว่าง 0 ถึง 100"> 
+      </div>
+      <div id="percentError" class="error-message" style="display: none;">กรุณากรอกค่า 0–100 เท่านั้น</div>
 
-button.clear {
-  background-color: #888;
-}
+      <div class="button-row">
+        <button id="calculateBtn">คำนวณ</button>
+        <button class="clear" id="resetBtn">ล้างข้อมูล</button>
+      </div>
+    </form>
 
-button:hover {
-  background-color: #005a9c;
-}
+    <div id="results" class="results-box"></div><br>
 
-.container {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  margin: auto;
-  max-width: 600px;
-  padding: 30px;
-}
 
-.error-box,
-.error-boxload {
-  background-color: #ffe5e5;
-  border-radius: 6px;
-  color: #cc0000;
-  font-weight: bold;
-  padding: 12px;
-  margin-top: 15px;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
+    
+    <div style="text-align: left;">
+      <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button><br><br>
+      <a href="index.html" style="background: none; border: none; color: #005a9c; padding: 0; text-decoration: underline;">🔙 กลับหน้าเลือกระบบ</a><br>
+    </div>
 
-.error-message {
-  color: red;
-  font-size: 0.85em;
-  margin-top: 5px;
-}
+    <div id="detailedSection" style="display: none; margin-top: 20px;">
+      <fieldset>
+        <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 10:00–15:00 น. (5 ชั่วโมง/วัน)</h3></legend>
+        <div id="deviceList"></div>
 
-h1 {
-  color: #2b5876;
-  text-align: center;
-  font-size: 1.8em;
-}
+        <div style="margin-top: 10px;">
+          <div class="form-group">
+            <label>ชื่ออุปกรณ์:
+              <select id="deviceSelect_day">
+                <option value="">-- เลือกอุปกรณ์ --</option>
+              </select>
+            </label>
+          </div>
 
-h3 {
-  border-left: 5px solid #0066cc;
-  color: #003366;
-  margin-top: 20px;
-  padding-left: 10px;
-  font-size: 1.2em;
-}
+          <div class="form-group">
+            <label>ชั่วโมงใช้งาน/วัน:</label><br>
+            <input type="number" id="deviceHoursDayHour" placeholder="ชั่วโมง" style="width: 80px;" title="จำนวนชั่วโมง"> ชั่วโมง
+            <input type="number" id="deviceHoursDayMin" placeholder="นาที" style="width: 80px;" title="จำนวนนาที"> นาที
+          </div>
+          <div id="error_day" class="error-message"></div>
 
-hr {
-  background-color: #00a000;
-  border: none;
-  height: 3px;
-  margin: 30px 0;
-}
+          <button onclick="addSelectedDevice('day')">➕ เพิ่มอุปกรณ์</button>
+          <button class="clear" onclick="resetFormLoad('day')">ล้างข้อมูล</button>
+        </div>
+      </fieldset>
 
-input {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top: 5px;
-  padding: 10px;
-  width: 100%;
-  font-size: 15px;
-}
+      <hr style="margin: 30px 0; border-top: 3px solid green;">
 
-label {
-  display: block;
-  margin-top: 15px;
-  font-size: 15px;
-}
+      <fieldset>
+        <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 15:01–09:59 น. (19 ชั่วโมง/วัน)</h3></legend>
+        <div id="nideviceList"></div>
 
-.results-box {
-  background-color: #eaf4fc;
-  border-left: 6px solid #2b5876;
-  border-radius: 5px;
-  margin-top: 30px;
-  padding: 20px;
-  white-space: pre-line;
-}
+        <div style="margin-top: 10px;">
+          <div class="form-group">
+            <label>ชื่ออุปกรณ์:
+              <select id="deviceSelect_night">
+                <option value="">-- เลือกอุปกรณ์ --</option>
+              </select>
+            </label>
+          </div>
 
-#deviceList button,
-#nideviceList button {
-  background-color: transparent;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 10px;
-  padding: 0 8px;
-}
+          <div class="form-group">
+            <label>ชั่วโมงใช้งาน/วัน:</label><br>
+            <input type="number" id="deviceHoursNightHour" placeholder="ชั่วโมง" style="width: 80px;" title="จำนวนชั่วโมง"> ชั่วโมง
+            <input type="number" id="deviceHoursNightMin" placeholder="นาที" style="width: 80px;" title="จำนวนนาที"> นาที
+          </div>
+          <div id="error_night" class="error-message"></div>
 
-#deviceList button:hover,
-#nideviceList button:hover {
-  background-color: transparent;
-  color: darkred;
-}
+          <button onclick="addSelectedDevice('night')">➕ เพิ่มอุปกรณ์</button>
+          <button class="clear" onclick="resetFormLoad('night')">ล้างข้อมูล</button>
+        </div>
+      </fieldset>
 
-#deviceList div,
-#nideviceList div {
-  align-items: center;
-  background-color: #f3f3f3;
-  border-left: 4px solid #007acc;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 0;
-  padding: 6px 10px;
-}
+      <button onclick="calculateTotalLoad()" style="margin-top: 10px;">📊 คำนวณโหลดรวม</button>
+      <button onclick="clearTotalLoad()" class="clear">🧹 ล้างข้อมูลคำนวณโหลดรวม</button>
+      <div id="resultArea" style="margin-top: 10px;"></div><br>
 
-#resultArea {
-  background-color: #e9f7ef;
-  border: 1px solid #b2dfdb;
-  border-radius: 8px;
-  font-size: 15px;
-  line-height: 1.6;
-  padding: 12px;
-}
+      <a href="index.html" style="background: none; border: none; color: #005a9c; padding: 0; text-decoration: underline;">🔙 กลับหน้าเลือกระบบ</a><br>
+    </div>
+  </div>
 
-#resultArea b {
-  color: #004466;
-}
-
-.button-row {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 20px 0;
-}
+  <script src="script.js"></script>
+</body>
+</html>
