@@ -1,58 +1,31 @@
-/* On-Grid SolarCalculation Styles */
-body {
-  font-family: 'Segoe UI', 'Prompt', sans-serif;
-  background: #f2fdf6;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
+/* 
+  SolarCalculation v4.0 by mpplearning
+  License: Non-Commercial Use Only
+  Contact: punmanee@gmail.com
+*/
 
-.container {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 16px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f9fc;
+  margin: 0;
+  padding: 30px;
   text-align: center;
 }
 
-h1, h2 {
-  color: #2c7a7b;
-  margin-bottom: 1rem;
+.container {
+  max-width: 600px;
+  margin: 0 auto;           /* ✅ จัด container ให้อยู่ตรงกลาง */
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h3 {
-  margin-bottom: 8px;
-  text-align: left;
-  font-size: 1.1rem;
-}
-
-input, button, select {
-  padding: 8px;
-  margin: 4px 0 8px;
-  width: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 0.9rem;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #38a169;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 0.9rem;
-  padding: 8px;
-}
-
-button.clear {
-  background-color: #888;
-}
-
-button:hover {
-  background-color: #2f855a;
+.system-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
 }
 
 .button {
@@ -60,9 +33,11 @@ button:hover {
   border-radius: 10px;
   color: white;
   display: inline-block;
-  padding: 0.8rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   text-decoration: none;
   font-size: 0.9rem;
+  min-width: 140px;
+  text-align: center;
   transition: background-color 0.3s ease;
 }
 
@@ -70,158 +45,192 @@ button:hover {
   background-color: #0056b3;
 }
 
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 10px;
+.desc {
+  font-size: 0.9rem;
+  color: #333;
+  text-align: left; /* สำคัญมาก */
+  flex: 1; /* ให้ขยายตามพื้นที่ที่เหลือ */
+}
+
+.intro-text {
+  margin-top: 30px;
+  font-size: 1rem;
+  color: green;
+}
+
+body {
+  background-color: #f2f6f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+button {
+  background-color: #0d3b66;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  margin: 4px 6px;
+  padding: 8px 14px;
+  transition: 0.3s;
+}
+
+button.clear {
+  background-color: #888;
+}
+
+button:hover {
+  background-color: #005a9c;
+}
+
+.error-box,
+.error-boxload {
+  background-color: #ffe5e5;
+  border-radius: 6px;
+  color: #cc0000;
+  font-weight: bold;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .error-message {
   color: red;
   font-size: 0.85em;
-  margin-top: 4px;
-  margin-bottom: 8px;
+  margin-top: 5px;
 }
 
-fieldset {
+h1 {
+  color: #2b5876;
+  text-align: auto;
+  font-size: 1.4em;
+}
+
+h3 {
+  border-left: 5px solid #0066cc;
+  color: #003366;
+  margin-top: 20px;
+  padding-left: 10px;
+  font-size: 1.2em;
+}
+
+hr {
+  background-color: #00a000;
+  border: none;
+  height: 3px;
+  margin: 30px 0;
+}
+
+input {
   border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  width: 100%;
+  font-size: 15px;
 }
 
-.form-group {
-  margin-bottom: 0.8rem;
-  text-align: left;
-}
-
-.icon {
-  display: inline-block;
-  width: 24px;
-}
-
-.intro-text {
-  color: green;
-  font-size: 1rem;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.legend {
-  color: #2c7a7b;
-  font-weight: bold;
-  padding: 0 10px;
-}
-
-.remark {
-  font-size: 0.85em;
-  margin: 8px 16px;
-  text-align: left;
-}
-
-.remark.green {
-  color: green;
-}
-
-.remark.gray {
-  color: gray;
-}
-
-.remark-note {
-  color: #666;
-  font-size: 0.8em;
+label {
+  display: block;
+  margin-top: 15px;
+  font-size: 15px;
 }
 
 .results-box {
-  background-color: #e6f9e6;
+  background-color: #eaf4fc;
   border-left: 6px solid #2b5876;
   border-radius: 5px;
-  margin-top: 18px;
-  padding: 14px;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  margin-top: 30px;
+  padding: 20px;
   white-space: pre-line;
+  text-align: left; /* สำคัญมาก */
+  flex: 1; /* ให้ขยายตามพื้นที่ที่เหลือ */
+  font-size: 14px;
+  line-height: 1.1;
 }
 
-.saving-btn {
-  background-color: #ccc;
+#deviceList button,
+#nideviceList button {
+  background-color: transparent;
   border: none;
-  border-radius: 5px;
-  color: #000;
+  color: red;
   cursor: pointer;
+  font-size: 10px;
+  padding: 0 8px;
+}
+
+#deviceList button:hover,
+#nideviceList button:hover {
+  background-color: transparent;
+  color: darkred;
+}
+
+#deviceList div,
+#nideviceList div {
+  align-items: center;
+  background-color: #f3f3f3;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  padding: 6px 10px;
+}
+
+#resultArea {
+  background-color: #e9f7ef;
+  border: 1px solid #b2dfdb;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 12px;
+  text-align: left;      /* ✅ ชิดซ้าย */
+  margin-top: 20px;
+}
+
+
+#resultArea b {
+  color: #004466;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.form-group {
+  text-align: left;
+  margin: 15px auto;
+  max-width: 500px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.results-box b {
+  font-weight: bold !important;
+}
+
+.results-box strong {
+  font-weight: bold !important;
+}
+
+b, strong {
   font-weight: bold;
-  margin-right: 6px;
-  padding: 5px 12px;
-  transition: background-color 0.2s ease;
-  font-size: 0.85rem;
-}
-
-.saving-btn.active {
-  background-color: #2d6a4f;
-  color: white;
-}
-
-.saving-btn:hover {
-  background-color: #aaa;
-}
-
-.section-group {
-  margin-bottom: 10px;
-}
-
-#onGridSection {
-  color: green;
-  font-size: 0.85em;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  text-align: left;
-}
-
-#result {
-  line-height: 1.4;
-  padding-left: 15px;
-  text-align: left;
-  font-size: 0.9rem;
-}
-
-#result div {
-  margin-bottom: 5px;
-}
-
-#saving-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 8px;
-}
-
-#saving-options input[type="radio"] {
-  margin-right: 5px;
-}
-
-#saving-options label {
-  align-items: center;
-  display: flex;
-  font-weight: normal;
-  font-size: 0.9rem;
-}
-
-.system-option {
-  align-items: center;
-  display: flex;
-  gap: 12px;
-  margin: 8px 0;
-}
-
-.system-option .button {
-  margin-right: 12px;
-  min-width: 140px;
-}
-
-.system-option .desc {
-  color: #555;
-  font-size: 0.9rem;
-  line-height: 1.3;
 }
