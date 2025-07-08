@@ -12,11 +12,12 @@ Contact: punmanee@gmail.com
     <title>ระบบ Off-Grid (Demo Version)</title>
     <link rel="stylesheet" href="offstyles.css">
 </head>
+<<body>
 <body>
     <div class="container">
         <h1>🔋 ระบบ Off-Grid (Demo Version)</h1>
         <label for="monthlyBill">💰 ค่าไฟต่อเดือน (บาท):</label>
-        <input type="text" id="monthlyBill" placeholder="เช่น 4,000">
+        <input type="text" id="monthlyBill" placeholder="เช่น 4,000"><br>
 
         <label for="backupHours">⏱️ จำนวนชั่วโมงที่ต้องการสำรองไฟต่อวัน:</label>
         <input type="number" id="backupHours" placeholder="เช่น 19">
@@ -28,56 +29,71 @@ Contact: punmanee@gmail.com
 
         <div id="results" class="results-box"></div><br>
 
-        <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button><br><br>
-        <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
-        <div id="detailedSection" style="display: none; margin-top: 20px;">
-            <h3>🔌 รายการอุปกรณ์ไฟฟ้า 10:00–15:00 น. (5 ชั่วโมง/วัน)</h3>
-            <div id="deviceList"></div>
+        <div style="text-align: left; margin-top: 20px;">
+            <button id="toggleDetailBtn">📋 คำนวณแบบละเอียด</button><br><br>
+            <a href="index.html" style="background: none; border: none; color: #005a9c; padding: 0; text-decoration: underline;">🔙 กลับหน้าเลือกระบบ</a><br>
+        </div>
 
-            <div style="margin-top: 10px;">
-                <label>ชื่ออุปกรณ์:
+        <div id="detailedSection" style="display: none; margin-top: 20px;">
+            <fieldset>
+                <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 10:00–15:00 น. (5 ชั่วโมง/วัน)</h3></legend>
+                <div id="deviceList"></div>
+
+                <div class="form-group">
+                    <label>ชื่ออุปกรณ์:</label>
                     <select id="deviceSelect_day">
                         <option value="">-- เลือกอุปกรณ์ --</option>
                     </select>
-                </label><br>
+                </div>
 
-                <label>ชั่วโมงใช้งาน/วัน:
+                <div class="form-group">
+                    <label>ชั่วโมงใช้งาน/วัน:</label>
                     <input type="number" id="deviceHoursDayHour" placeholder="ชั่วโมง" style="width: 80px;"> ชั่วโมง
                     <input type="number" id="deviceHoursDayMin" placeholder="นาที" style="width: 80px;"> นาที
-                </label><br>
                     <div id="error_day" class="error-message"></div>
+                </div>
 
-                <button onclick="addSelectedDevice('day')">➕ เพิ่มอุปกรณ์</button>
-                <button class="clear" onclick="resetFormLoad('day')">ล้างข้อมูล</button>
-            </div>
+                <div class="button-row">
+                    <button onclick="addSelectedDevice('day')">➕ เพิ่มอุปกรณ์</button>
+                    <button class="clear" onclick="resetFormLoad('day')">ล้างข้อมูล</button>
+                </div>
+            </fieldset>
 
-            <hr style="margin: 30px 0; border-top: 3px solid green;">
+            <hr>
 
-            <h3>🔌 รายการอุปกรณ์ไฟฟ้า 15:01–09:59 น. (19 ชั่วโมง/วัน)</h3>
-            <div id="nideviceList"></div>
+            <fieldset>
+                <legend><h3>🔌 รายการอุปกรณ์ไฟฟ้า 15:01–09:59 น. (19 ชั่วโมง/วัน)</h3></legend>
+                <div id="nideviceList"></div>
 
-            <div style="margin-top: 10px;">
-                <label>ชื่ออุปกรณ์:
+                <div class="form-group">
+                    <label>ชื่ออุปกรณ์:</label>
                     <select id="deviceSelect_night">
                         <option value="">-- เลือกอุปกรณ์ --</option>
                     </select>
-                </label><br>
+                </div>
 
-                <label>ชั่วโมงใช้งาน/วัน:
+                <div class="form-group">
+                    <label>ชั่วโมงใช้งาน/วัน:</label>
                     <input type="number" id="deviceHoursNightHour" placeholder="ชั่วโมง" style="width: 80px;"> ชั่วโมง
                     <input type="number" id="deviceHoursNightMin" placeholder="นาที" style="width: 80px;"> นาที
-                </label><br>
                     <div id="error_night" class="error-message"></div>
+                </div>
 
-                <button onclick="addSelectedDevice('night')">➕ เพิ่มอุปกรณ์</button>
-                <button class="clear" onclick="resetFormLoad('night')">ล้างข้อมูล</button>
+                <div class="button-row">
+                    <button onclick="addSelectedDevice('night')">➕ เพิ่มอุปกรณ์</button>
+                    <button class="clear" onclick="resetFormLoad('night')">ล้างข้อมูล</button>
+                </div>
+            </fieldset>
+
+            <div class="button-row">
+                <button onclick="calculateTotalLoad()">📊 คำนวณโหลดรวม</button>
+                <button onclick="clearTotalLoad()" class="clear">🧹 ล้างข้อมูลคำนวณโหลดรวม</button>
             </div>
+            <div id="resultArea"></div>
 
-            <button onclick="calculateTotalLoad()" style="margin-top: 10px;">📊 คำนวณโหลดรวม</button>
-            <button onclick="clearTotalLoad()" class="clear">🧹 ล้างข้อมูลคำนวณโหลดรวม</button>
-            <div id="resultArea" style="margin-top: 10px;"></div><br>
-
-            <br><a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a><br>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="index.html" class="button">🔙 กลับหน้าเลือกระบบ</a>
+            </div>
         </div>
     </div>
 
