@@ -3,14 +3,16 @@ Custom MIT License (Non-Commercial Variant)
 Copyright (c) 2025 mpplearning
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction for personal, educational, and non-commercial use only,
-including without limitation the rights to use, copy, modify, merge, publish, and distribute
-copies of the Software, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, merge, publish, and distribute copies of the Software for 
+**personal, educational, and non-commercial purposes only**, subject to the 
+following conditions:
 
-⚠️ Commercial use, including but not limited to selling, sublicensing, or distributing this Software
-or any derivative works for commercial purposes, is strictly prohibited without prior written permission
-from the author (mpplearning – punmanee@gmail.com).
+⚠️ Commercial use — including but not limited to selling, sublicensing, 
+hosting as part of a paid service, or distributing this Software or any 
+derivative works for commercial gain — is strictly prohibited without 
+prior written permission from the author  
+(**mpplearning – punmanee@gmail.com**).
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -22,3 +24,29 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+For commercial licensing inquiries, please contact the author directly.
+
+---
+
+🌐 **ใบอนุญาตแบบ MIT สำหรับใช้ส่วนตัวหรือไม่เพื่อการค้า (ฉบับแปลไทยอย่างไม่เป็นทางการ)**
+
+ลิขสิทธิ์ (c) 2025 โดย mpplearning
+
+อนุญาตให้บุคคลใดก็ตามสามารถใช้งาน คัดลอก ปรับแก้ เผยแพร่ รวมถึงแจกจ่ายซอฟต์แวร์นี้
+และไฟล์เอกสารประกอบ ("ซอฟต์แวร์") ได้ฟรี โดยมีวัตถุประสงค์เพื่อ
+**การใช้งานส่วนตัว การศึกษา และการวิจัยที่ไม่แสวงหากำไรเท่านั้น**
+
+❌ **ห้ามนำซอฟต์แวร์นี้ไปใช้ในเชิงพาณิชย์**  
+เช่น ขายต่อ, ให้บริการแบบเสียเงิน, นำไปประกอบในระบบที่ให้เช่า/ขาย หรือแจกจ่ายซอฟต์แวร์นี้
+เพื่อผลประโยชน์ทางการค้า **โดยไม่ได้รับอนุญาตเป็นลายลักษณ์อักษรจากผู้เขียน**  
+(ติดต่อ: mpplearning – punmanee@gmail.com)
+
+ต้องแนบประกาศลิขสิทธิ์นี้ไว้ในสำเนาของซอฟต์แวร์ หรือในส่วนสำคัญของงานที่ใช้ซอฟต์แวร์นี้
+
+ซอฟต์แวร์นี้จัดให้ตามสภาพ ("AS IS")  
+โดยไม่มีการรับประกันใด ๆ ไม่ว่าจะโดยชัดแจ้งหรือโดยนัย  
+รวมถึงแต่ไม่จำกัดเพียง การรับประกันคุณภาพ การใช้งานได้ตามวัตถุประสงค์ หรือการไม่ละเมิดสิทธิ์  
+ไม่ว่าในกรณีใด ผู้เขียนจะไม่รับผิดชอบต่อความเสียหายหรือข้อเรียกร้องที่เกิดจากการใช้งานซอฟต์แวร์นี้
+
+📩 หากคุณต้องการขออนุญาตใช้งานในเชิงพาณิชย์ กรุณาติดต่อผู้เขียนโดยตรง
