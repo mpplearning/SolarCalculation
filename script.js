@@ -80,6 +80,8 @@ function calculateOnGrid() {
         { kw: 90, watt: 97200 }, { kw: 100, watt: 108000 }
     ];
 
+        const format = num => num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
     let recommendedKW = null;
     for (let i = 0; i < systemSizes.length; i++) {
         if (solarKW <= systemSizes[i].kw) {
@@ -91,18 +93,19 @@ function calculateOnGrid() {
         recommendedKW = `<span style="color:red;"><b>❌ ขนาดระบบที่ต้องการมากกว่า 100kW</b> — กรุณาติดต่อผู้เชี่ยวชาญเพื่อประเมินเพิ่มเติม</span>`;
     }
 
-    let installationNote = "";
-    if (solarKW < 3) {
-        installationNote = `<span style="color:red;"><b>❌ คำเตือน:</b> ขนาดระบบที่คำนวณได้ต่ำกว่า 3kW อาจไม่คุ้มค่าต่อการติดตั้ง</span><br>`;
-    } else {
-        if (typeof recommendedKW === 'number') {
-            installationNote = `📌 <b>ขนาดระบบที่ควรติดตั้ง:</b> ${recommendedKW} kW<br>`;
-        } else {
-            installationNote = `📌 <b>ขนาดระบบที่ควรติดตั้ง:</b> ${recommendedKW}<br>`;
-        }
-    }
+let installationNote = "";
 
-    const format = num => num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+if (solarKW < 3) {
+    installationNote = `<span style="color:red;"><b>❌ คำเตือน:</b> ขนาดระบบที่คำนวณได้ต่ำกว่า 3kW อาจไม่คุ้มค่าต่อการติดตั้ง</span><br>`;
+} else {
+    if (typeof recommendedKW === 'number') {
+        installationNote += `<span style="color:green;">📌 <b>ขนาดระบบที่ควรติดตั้ง:</b> ${format(recommendedKW)} kW</span><br>`;
+    } else {
+        // ไม่ต้อง format เพราะเป็น HTML แล้ว
+        installationNote = `${recommendedKW}<br>`;
+    }
+}
+
 
     const result = `
         <div class="results-box">
@@ -112,7 +115,7 @@ function calculateOnGrid() {
             💡 ค่าไฟเดิมของลูกค้า: <b>${format(bill)}</b> บาท (${format(monthlyKWh)} หน่วย)<br><br>
 
             <div><b>⚙️ ขนาดระบบที่แนะนำ:</b></div>
-            ✅ ขนาดระบบติดตั้งที่แนะนำ: <b>${format(solarKW)}</b> kW<br>
+            ✅ ขนาดระบบติดตั้งที่แนะนำ: <strong>${format(solarKW)}</strong> kW<br>
             ${installationNote}
             ☀️ ผลิตไฟเฉลี่ยต่อวัน (5 ชม.): <b>${format(dailySolarKWh)}</b> kWh<br>
             🔋 ผลิตไฟเฉลี่ยต่อเดือน: <b>${format(monthlySolarKWh)}</b> kWh<br><br>
@@ -318,6 +321,17 @@ function removeDevice(time, index) {
 }
 
 function calculateTotalLoad() {
+    const allDevices = [...devicesDay, ...devicesNight];
+    if (allDevices.length === 0) {
+        document.getElementById("resultArea").innerHTML = `
+            <div class="error-boxload">
+                ⚠️ <strong>กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</strong><br>
+                ❌ ยังไม่มีรายการอุปกรณ์ไฟฟ้าที่ต้องการคำนวณ
+            </div>
+        `;
+        return;
+    }
+
     const calc = arr => arr.reduce((sum, d) => sum + (d.watt * d.hour), 0);
     const kWh = w => (w / 1000);
     const format = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -343,7 +357,7 @@ function calculateTotalLoad() {
     }
 
     document.getElementById("resultArea").innerHTML = `
-    <div class="results-box">
+    <div class="results-box" style="line-height:1.2;">
         ☀️ พลังงานใช้ช่วงกลางวัน (10:00–15:00): <b>${format(kWh(dayLoad))}</b> kWh/วัน<br>
         🌙 พลังงานใช้ช่วงกลางคืน (15:01–09:59): <b>${format(kWh(nightLoad))}</b> kWh/วัน<br>
         🔋 พลังงานใช้รวมต่อวัน: <b>${format(kWh(totalLoad))}</b> kWh/วัน<br>
@@ -358,6 +372,7 @@ function calculateTotalLoad() {
         หมายเหตุ: ประเมินโดยใช้ค่าไฟ 4.5 บาท/หน่วย แดดเฉลี่ย 5 ชม./วัน และประสิทธิภาพระบบ 80%</p>
     </div>`;
 }
+
 
 function resetFormLoad(type) {
     if (type === 'day') {
