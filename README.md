@@ -3,7 +3,7 @@
 A simple, educational, and practical **solar calculator** for estimating installation size, monthly savings, and payback period of solar panel systems — tailored for **homeowners, small businesses, and beginners** exploring solar energy in Thailand.
 
 🔗 **Live Demo:**  
-[https://www.solarhub.mpplearning.com](https://www.solarhub.mpplearning.com)
+[https://mpplearning.github.io/SolarCalculation](https://mpplearning.github.io/SolarCalculation)
 
 ---
 
